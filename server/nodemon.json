@@ -4,5 +4,5 @@
   ],
   "verbose": true,
   "ext": "ts,js",
-  "exec": "node --loader ts-node/esm -r dotenv/config ./src/server.ts dotenv_config_path=../.env"
+  "exec": "node --loader ts-node/esm ./src/server.ts"
 }

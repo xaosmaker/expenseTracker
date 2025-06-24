@@ -1,0 +1,17 @@
+services:
+  expense_tracker:
+    container_name: expense_tracker
+    build:
+      context: .
+      dockerfile: ./docker/local/server/Dockerfile
+    volumes:
+        - ./server:/server
+        - /server/node_modules
+    ports:
+      - 8080:8080
+
+    command: npm run dev
+
+
+
+

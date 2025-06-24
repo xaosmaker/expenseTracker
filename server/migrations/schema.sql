@@ -7,3 +7,7 @@ file_name varchar(50) NOT NULL UNIQUE
 );
 
 
+INSERT INTO expense_schema.users_schema(file_name) 
+VALUES('0001_init.sql') ON CONFLICT DO NOTHING;
+
+

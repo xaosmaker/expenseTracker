@@ -9,10 +9,13 @@ services:
         - /server/node_modules
     env_file:
         - ./.env
+    expose: 
+      - ${PORT}
     ports:
-      - 8080:8080
+      - 8080:${PORT}
     networks:
         - expense_tracker_db_net
+        - local-nginx-net
 
     command: npm run dev
 
@@ -35,6 +38,8 @@ services:
 
 
 networks:
+  local-nginx-net:
+    external: true
   expense_tracker_db_net:
 
 

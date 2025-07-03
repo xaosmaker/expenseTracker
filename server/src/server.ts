@@ -2,25 +2,15 @@ import express from "express"
 import { PORT } from "./settings.js"
 import { appErrorHandler } from "./errors/appErrorHandler.js"
 import { notFoundErrorHandler } from "./errors/notFoundErrorHandler.js"
-import { User } from "./types/User.js"
+import { userRoutes } from "./routes/userRoutes.js"
 
 const server = express()
 
 
+server.use(express.json())
 
 
-
-
-
-
-
-server.get("/", (_req, res, _next) => {
-  const date = new Date()
-  const user = new User({ id: 1, email: "somemail ", password: "1234", created_at: date, updated_at: date })
-  res.json(user.userWithoutPass())
-})
-
-
+server.use("/api/users", userRoutes)
 
 
 

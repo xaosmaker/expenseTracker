@@ -2,13 +2,14 @@ import { DatabaseError } from "pg";
 import { CreateUser, User } from "../types/User.js";
 import { pool } from "./dbPool.js";
 import { AppError } from "../errors/AppErrors.js";
+import bcrypt from "bcrypt"
 
 export async function createUserQuerie({ email, password }: Omit<CreateUser, 'confirmPassword'>) {
-  //TODO: implement cryptographic password here
 
+  const hashPass = await bcrypt.hash(password, 15)
   try {
 
-    const { rows } = await pool.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *;", [email, password])
+    const { rows } = await pool.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *;", [email, hashPass])
     const user = new User(rows[0])
     return user
 

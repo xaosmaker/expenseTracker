@@ -24,3 +24,19 @@ export async function createUserQuerie({ email, password }: Omit<CreateUser, 'co
 
   }
 }
+
+export async function getUserByEmailQuerie(email: string) {
+  const { rows } = await pool.query("SELECT * FROM users WHERE email = $1;", [email])
+  if (rows.length === 1) {
+    return new User(rows[0])
+  }
+  return
+}
+
+export async function getUserWithIdQuerie(id: number) {
+  const { rows } = await pool.query("SELECT * FROM users WHERE id = $1;", [id])
+  if (rows.length === 1) {
+    return new User(rows[0])
+  }
+  return
+}

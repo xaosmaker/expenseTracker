@@ -3,7 +3,7 @@ export interface UserResetPassword {
   confirmPassword: string
 
 }
-interface RawUser extends Pick<UserResetPassword, "password"> {
+export interface RawUser extends Pick<UserResetPassword, "password"> {
   id: number
   email: string
 

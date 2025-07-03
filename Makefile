@@ -1,7 +1,7 @@
 run:
 	docker compose -f local.yaml up -d --remove-orphans
 
-build: run
+build:
 	docker compose -f local.yaml build --no-cache
 
 down:

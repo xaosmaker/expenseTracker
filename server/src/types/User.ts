@@ -14,6 +14,8 @@ export interface UserDB extends RawUser {
   updated_at: Date
 }
 
+export interface CreateUser extends UserResetPassword, Pick<RawUser, "email"> { }
+
 
 
 

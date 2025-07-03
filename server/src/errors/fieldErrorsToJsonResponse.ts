@@ -13,8 +13,11 @@ export function fieldErrorsToJsonResponse(req: Request) {
     e = e as FieldValidationError
     return { field: e.path, message: e.msg }
   })
+  if (errorArr.length > 0) {
 
-  throw new AppError(errorArr, 400)
+
+    throw new AppError(errorArr, 400)
+  }
 
 
 

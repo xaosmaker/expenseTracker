@@ -1,8 +1,0 @@
-{
-  "watch": [
-    "src"
-  ],
-  "verbose": true,
-  "ext": "ts,js",
-  "exec": "node --loader ts-node/esm ./src/server.ts"
-}

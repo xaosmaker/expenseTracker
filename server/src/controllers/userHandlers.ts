@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { fieldErrorsToJsonResponse } from "../errors/fieldErrorsToJsonResponse.js";
-import { CreateUser } from "../types/User.js";
+import { CreateUser, RawUser } from "../types/User.js";
 import { AppError } from "../errors/AppErrors.js";
-import { createUserQuerie } from "../models/usersDB.js";
+import { createUserQuerie, getUserByEmailQuerie } from "../models/usersDB.js";
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import { JWT_SECRET } from "../settings.js";
 
 
 
@@ -20,4 +23,38 @@ export async function createUserHandler(req: Request<{}, {}, CreateUser>, res: R
   res.status(201).json(user.userWithoutPass())
 
 
+}
+
+export async function loginUserHandler(req: Request<{}, {}, Omit<RawUser, "id">>, res: Response, _next: NextFunction) {
+  const err = new AppError("Email or password is invalid", 400)
+
+
+  const email = req?.body?.email
+  const pass = req?.body?.password
+
+
+  if (!email || !pass) {
+    throw err
+  }
+
+  const user = await getUserByEmailQuerie(email)
+
+  if (!user) {
+    throw err
+  }
+  const isValid = await bcrypt.compare(pass, user.password)
+
+  if (!isValid) {
+    throw err
+  }
+
+  const jwt_key = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' })
+
+  res.cookie("jwt-key", jwt_key, { maxAge: 3600 * 1000 * 8, httpOnly: true, secure: true, sameSite: "strict" })
+  res.json({ message: "succesfully login" })
+
+}
+
+export async function getUserWithIdHandler(_req: Request, res: Response, _next: NextFunction) {
+  res.json({ message: "work" })
 }

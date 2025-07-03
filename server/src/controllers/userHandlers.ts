@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { fieldErrorsToJsonResponse } from "../errors/fieldErrorsToJsonResponse.js";
-import { CreateUser, RawUser } from "../types/User.js";
+import { CreateUser, RawUser, User } from "../types/User.js";
 import { AppError } from "../errors/AppErrors.js";
 import { createUserQuerie, getUserByEmailQuerie } from "../models/usersDB.js";
 import bcrypt from "bcrypt"
@@ -48,6 +48,7 @@ export async function loginUserHandler(req: Request<{}, {}, Omit<RawUser, "id">>
     throw err
   }
 
+  //TODO: add hours to settings
   const jwt_key = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' })
 
   res.cookie("jwt-key", jwt_key, { maxAge: 3600 * 1000 * 8, httpOnly: true, secure: true, sameSite: "strict" })
@@ -55,6 +56,10 @@ export async function loginUserHandler(req: Request<{}, {}, Omit<RawUser, "id">>
 
 }
 
-export async function getUserWithIdHandler(_req: Request, res: Response, _next: NextFunction) {
-  res.json({ message: "work" })
+export async function getUserWithIdHandler(req: Request, res: Response, _next: NextFunction) {
+  if (req.user instanceof User) {
+    res.json(req.user.userWithoutPass())
+    return
+  }
+  throw new AppError("Unauthorized", 401)
 }

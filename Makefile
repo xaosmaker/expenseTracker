@@ -15,5 +15,5 @@ logs:
 
 inspect_server:
 	docker exec -it expense_tracker /bin/sh
-migrations-dev:
-	docker exec expense_tracker npm run migrations-dev
+migrations:
+	docker exec expense_tracker npm run migrations

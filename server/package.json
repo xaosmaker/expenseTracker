@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "concurrently 'tsc -w' 'nodemon ./dist/server.js'",
-    "migrations-dev": "tsc && node ./dist/makeMigrations.js"
+    "migrations": "node ./dist/makeMigrations.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
   "type": "module",
   "dependencies": {
     "express": "^5.1.0",
+    "express-validator": "^7.2.1",
     "pg": "^8.16.2"
   },
   "devDependencies": {

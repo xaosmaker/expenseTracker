@@ -49,5 +49,9 @@ export async function putPaymentByIdQuery(id: number, user_id: number, { payed_d
   return
 }
 
+export async function deletePaymentByIdQuery(id: number, user_id: number) {
+  await pool.query("DELETE FROM payments WHERE id = $1 AND user_id = $2", [id, user_id])
+}
+
 
 

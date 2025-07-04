@@ -7,7 +7,7 @@ export interface FieldErrors {
   message: string
 }
 
-export function fieldErrorsToJsonResponse(req: Request) {
+export function fieldErrorsToJsonResponse(req: Request<any>) {
   const errors = validationResult(req)
   const errorArr: FieldErrors[] = errors.array().map((e) => {
     e = e as FieldValidationError

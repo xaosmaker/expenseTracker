@@ -30,3 +30,24 @@ export async function getPaymentsByUserIdQuery(user_id: number) {
   }
   return paymentList
 }
+
+export async function getPaymentByIDAndUserIdQuery(user_id: number, id: number) {
+  const { rows } = await pool.query("SELECT * FROM payments where user_id = $1 AND id = $2", [user_id, id])
+  if (rows.length === 1) {
+    return new Payment(rows[0])
+  }
+  return
+
+}
+
+export async function putPaymentByIdQuery(id: number, user_id: number, { payed_due_date, is_payed, name, amount }: CreatePaymentDB) {
+  const { rows } = await pool.query("UPDATE payments  SET (payed_due_date, name, amount, is_payed, updated_at) = ($1, $2, $3,$4, CURRENT_TIMESTAMP) WHERE id = $5 AND user_id = $6 RETURNING *;",
+    [payed_due_date, name, amount, is_payed, id, user_id])
+  if (rows.length === 1) {
+    return new Payment(rows[0])
+  }
+  return
+}
+
+
+

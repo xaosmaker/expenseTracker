@@ -19,6 +19,22 @@ services:
 
     command: npm run dev
 
+  expence_client:
+    container_name: expense_client
+    build:
+      context: .
+      dockerfile: ./docker/local/client/Dockerfile
+    volumes:
+      - ./client:/client
+      -  /client/node_modules
+    ports:
+      - 5173:5173
+    networks:
+      - local-nginx-net
+    command: npm run dev
+    
+
+
 
   expense_db:
     container_name: expense_db

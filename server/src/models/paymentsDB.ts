@@ -19,3 +19,14 @@ export async function createPaymentQuery({ name, payed_due_date, amount, user_id
     throw new AppError("Database Error", 500)
   }
 }
+
+
+export async function getPaymentsByUserIdQuery(user_id: number) {
+  const { rows } = await pool.query("SELECT * FROM payments where user_id = $1", [user_id])
+  const paymentList: Payment[] = []
+  for (const row of rows) {
+    paymentList.push(new Payment(row))
+
+  }
+  return paymentList
+}

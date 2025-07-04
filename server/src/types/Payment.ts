@@ -14,6 +14,9 @@ export interface CreatePaymentDB {
   is_payed: boolean
 
 }
+export interface PutPayment extends CreatePayment {
+  id: number
+}
 
 
 

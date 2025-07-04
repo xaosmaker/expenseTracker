@@ -11,3 +11,9 @@ export function createPaymentValidator() {
 
   ]
 }
+export function putPaymentValidator() {
+  const validators = createPaymentValidator()
+  const valId = body("id").isInt().withMessage("int, required")
+  validators.push(valId)
+  return validators
+}

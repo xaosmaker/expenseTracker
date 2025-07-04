@@ -3,7 +3,7 @@ import { CreatePayment, CreatePaymentDB, PutPayment } from "../types/Payment.js"
 import { fieldErrorsToJsonResponse } from "../errors/fieldErrorsToJsonResponse.js";
 import { User } from "../types/User.js";
 import { AppError } from "../errors/AppErrors.js";
-import { createPaymentQuery, getPaymentByIDAndUserIdQuery, getPaymentsByUserIdQuery, putPaymentByIdQuery } from "../models/paymentsDB.js";
+import { createPaymentQuery, deletePaymentByIdQuery, getPaymentByIDAndUserIdQuery, getPaymentsByUserIdQuery, putPaymentByIdQuery } from "../models/paymentsDB.js";
 
 
 export async function createPaymentHandler(req: Request<{}, {}, CreatePayment>, res: Response, _next: NextFunction) {
@@ -70,5 +70,28 @@ export async function putPaymentByIDHandler(req: Request<{ id: number }, {}, Put
   }
   throw new AppError("Something went wrond Updating the payment", 400)
 }
+
+
+export async function deletePaymentWithIdHandler(req: Request<{ id: number }>, res: Response, _next: NextFunction) {
+
+  if (!(req.user instanceof User)) {
+    throw new AppError("Unauthorized", 401)
+  }
+
+  const id = Number(req.params.id)
+  if (isNaN(id) && !Number.isInteger(id)) {
+    throw new AppError("Id should be an Integer", 400)
+  }
+  const payment = await getPaymentByIDAndUserIdQuery(req.user.id, id)
+  if (!payment) {
+    throw new AppError("This Payment does not exist", 400)
+  }
+  await deletePaymentByIdQuery(id, req.user.id)
+  res.status(204).json()
+}
+
+
+
+
 
 

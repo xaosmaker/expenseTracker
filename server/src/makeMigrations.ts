@@ -151,7 +151,7 @@ async function makeMigrations(migrationsModuleOrder: string[]) {
 }
 
 
-makeMigrations(["users"])
+makeMigrations(["users", "payments"])
 
 
 

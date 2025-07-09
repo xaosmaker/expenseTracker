@@ -8,58 +8,63 @@ import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import { NavLink, useLocation } from "react-router-dom"
 import Link from "@mui/material/Link"
-import { z } from "zod/v4"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Alert from "@mui/material/Alert"
-import { PasswordField } from "./PasswordField"
-
-
-
-const regSchema = z.object({
-  email: z.email(),
-  password: z.string()
-    .min(8, "password should be at least 8 char long")
-    .regex(/[A-Z]/, { message: "password should contain at least one uppercase character", abort: false })
-    .regex(/[1-9]/, "password should contain at least one number")
-    .regex(/[*!#$%]/, "password should contain at least one symbol [* ! # % $]"),
-  confirmPassword: z.string()
-
-}).check((data) => {
-  if (data.value.password !== data.value.confirmPassword) {
-    data.issues.push({
-      code: "custom",
-      message: "Password mismatch",
-      input: data.value.password,
-      path: ["confirmPassword"]
-    })
-  }
-})
+import { PasswordField } from "../../components/PasswordField"
+import { regSchema, type RegisterUser } from "../schemas/regSchema"
+import { loginUser, registerUser } from "../services/userServices"
+import { AxiosError } from "axios"
+import { isFormContainsErrors } from "../../helpers/utils"
+import { useNavigate } from "react-router-dom"
 
 
 
 
-type Register = z.infer<typeof regSchema>
+
+
+
 
 export default function LoginReg() {
   const { pathname } = useLocation()
   const isRegister = pathname === "/register"
+  const navigate = useNavigate()
 
-  function isEmptyObject(obj: object) {
-    return Object.keys(obj).length > 0
+
+  const onSubmit: SubmitHandler<RegisterUser> = async (formData) => {
+    try {
+      if (isRegister) {
+        const res = await registerUser(formData)
+        if (res.email === formData.email) {
+          navigate("/login")
+
+        }
+        return
+      }
+      const res = await loginUser(formData)
+      console.log(res);
+
+
+
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        setError("root", {
+          message: e.response?.data.message || "Something went Wrong Try again later"
+        })
+        return
+      }
+      console.log(3, e);
+    }
   }
 
-  const onSubmit: SubmitHandler<Register> = (data) => {
-    console.log(data);
-  }
 
-  const { register, handleSubmit, formState: { errors } } = useForm<Register>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setError } = useForm<RegisterUser>({
     mode: "onChange",
     resolver: isRegister ? zodResolver(regSchema) : undefined
-
   })
+
   return (
-    <Box sx={{ minHeight: "100vh", backgroundColor: "yellow", justifyContent: "center", alignContent: "center" }}>
+    <Box sx={{ minHeight: "100vh", justifyContent: "center", alignContent: "center" }}>
 
       <Container maxWidth="xs">
         <Paper component={'form'} onSubmit={handleSubmit(onSubmit)} sx={{ p: 2 }}>
@@ -86,8 +91,9 @@ export default function LoginReg() {
 
 
 
-            <Button type="submit" disabled={isEmptyObject(errors)} variant="contained">{isRegister ? "Register" : "Log in"}</Button>
+            <Button type="submit" disabled={!isFormContainsErrors(errors)} loading={isSubmitting} variant="contained">{isRegister ? "Register" : "Log in"}</Button>
 
+            {!!errors.root && <Alert severity="error"  >{errors.root?.message}</Alert>}
 
             <Divider>or</Divider>
 

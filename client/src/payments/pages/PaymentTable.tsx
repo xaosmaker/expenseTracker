@@ -5,6 +5,25 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useQuery } from '@tanstack/react-query';
+import { getPayments } from '../services/paymentServices';
+
+
+
+
+interface Payment {
+  id: number
+  name: string
+  payedDueDate: Date
+  amount: number
+  userId: number
+  isPayed: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+
+
 
 function createData(
   name: string,
@@ -25,6 +44,14 @@ const rows = [
 ];
 
 export default function BasicTable() {
+
+  const { data, error, isLoading } = useQuery({ queryKey: ["payments"], queryFn: getPayments })
+  const payments: Payment[] = data
+  console.log(payments, isLoading);
+
+  console.log(22, data);
+  console.log("e", error?.message);
+
   return (
 
     <TableContainer component={Paper} sx={{ maxHeight: 500, overflow: 'auto' }}>
@@ -32,8 +59,8 @@ export default function BasicTable() {
         <TableHead>
           <TableRow>
             <TableCell></TableCell>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
+            <TableCell>Payment Name</TableCell>
+            <TableCell align="right">payed due data</TableCell>
             <TableCell align="right">Fat&nbsp;(g)</TableCell>
             <TableCell align="right">Carbs&nbsp;(g)</TableCell>
             <TableCell align="right">Protein&nbsp;(g)</TableCell>

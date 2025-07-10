@@ -42,6 +42,7 @@ export default function LoginReg() {
         return
       }
       const res = await loginUser(formData)
+      navigate("/payments")
       console.log(res);
 
 

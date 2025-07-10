@@ -28,7 +28,6 @@ function Layout() {
   };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  console.log(isMobile);
 
   const layoutContext = {
 

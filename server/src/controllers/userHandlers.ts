@@ -52,6 +52,7 @@ export async function loginUserHandler(req: Request<{}, {}, Omit<RawUser, "id">>
   const jwt_key = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '8h' })
 
   res.cookie("jwt-key", jwt_key, { maxAge: 3600 * 1000 * 8, httpOnly: true, secure: true, sameSite: "strict" })
+  res.cookie("login", JSON.stringify({ isLogin: true, }), { maxAge: 3600 * 1000 * 8, sameSite: "strict", secure: true })
   res.json({ message: "succesfully login" })
 
 }

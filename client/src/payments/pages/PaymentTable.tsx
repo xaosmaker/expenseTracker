@@ -7,6 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useQuery } from '@tanstack/react-query';
 import { getPayments } from '../services/paymentServices';
+import TablePagination from '@mui/material/TablePagination';
 
 
 
@@ -26,21 +27,26 @@ interface Payment {
 
 
 function createData(
+  id: number,
   name: string,
   calories: number,
   fat: number,
   carbs: number,
   protein: number,
 ) {
-  return { name, calories, fat, carbs, protein };
+  return { id, name, calories, fat, carbs, protein };
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData(1, 'Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData(2, 'Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData(3, 'Eclair', 262, 16.0, 24, 6.0),
+  createData(4, 'Cupcake', 305, 3.7, 67, 4.3),
+  createData(5, 'Gingerbread', 356, 16.0, 49, 3.9),
+  createData(6, 'Gingerbread', 356, 16.0, 49, 3.9),
+  createData(7, 'Gingerbread', 356, 16.0, 49, 3.9),
+  createData(8, 'Gingerbread', 356, 16.0, 49, 3.9),
+  createData(9, 'Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 export default function BasicTable() {
@@ -54,38 +60,46 @@ export default function BasicTable() {
 
   return (
 
-    <TableContainer component={Paper} sx={{ maxHeight: 500, overflow: 'auto' }}>
-      <Table stickyHeader aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell>Payment Name</TableCell>
-            <TableCell align="right">payed due data</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
+    <Paper>
+
+      <TableContainer component={Paper} sx={{ maxHeight: 500, overflow: 'auto' }}>
+        <Table stickyHeader aria-label="simple table">
+          <TableHead>
+            <TableRow>
               <TableCell></TableCell>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell>Payment Name</TableCell>
+              <TableCell align="right">payed due data</TableCell>
+              <TableCell align="right">Fat&nbsp;(g)</TableCell>
+              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
+              <TableCell align="right">Protein&nbsp;(g)</TableCell>
               <TableCell></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell></TableCell>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.calories}</TableCell>
+                <TableCell align="right">{row.fat}</TableCell>
+                <TableCell align="right">{row.carbs}</TableCell>
+                <TableCell align="right">{row.protein}</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination rowsPerPageOptions={[5, 10, 15]} rowsPerPage={5} onPageChange={(e, nextPage) => {
+        console.log("page", e, nextPage);
+      }} onRowsPerPageChange={(e) => {
+        console.log("row", e.target.value);
+      }} page={4} count={125} component={"div"} />
+    </Paper>
   );
 }

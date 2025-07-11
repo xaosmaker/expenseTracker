@@ -3,6 +3,7 @@ import LoginReg from "../users/routes/LoginReg"
 import Layout from "../components/Layout"
 import PaymentTable from "../payments/pages/PaymentTable"
 import RequireAuth from "../auth/routes/RequireAuth"
+import CreatePayment from "../payments/pages/CreatePayment"
 
 
 export const router = createBrowserRouter([
@@ -13,6 +14,7 @@ export const router = createBrowserRouter([
       {
         path: "/", Component: Layout, children: [
           { path: "/payments", Component: PaymentTable },
+          { path: "/payments/create", Component: CreatePayment },
 
         ]
       },

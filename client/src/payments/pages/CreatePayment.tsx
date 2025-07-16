@@ -3,68 +3,67 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useForm, Controller } from "react-hook-form";
+import { paymentSchema, type CreatePayment, type PaymentSchema } from "../types/paymentTypes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { dateToYMD, isFormContainsErrors } from "../../helpers/utils";
+import { useMutation } from "@tanstack/react-query";
+import { createPayment } from "../services/paymentServices";
 
-//TODO: basic form to use for create payment i work on this and change the data later
-//i will make it so it can update and the data
+//TODO: i will make it so it can update and the data so it will be create update
 
 export default function CreatePayment() {
-  const { control } = useForm({
-    defaultValues: {
-      bool: true
-    }
+  const navigate = useNavigate()
+  const { control: formControl, register, handleSubmit, formState: { errors } } = useForm<PaymentSchema>({
+    mode: "onChange",
+    resolver: zodResolver(paymentSchema),
+  })
+  function submitForm(data: PaymentSchema) {
+    const dataNew: CreatePayment = { ...data, payedDueDate: dateToYMD(data.payedDueDate) }
+
+    mutate(dataNew)
+  }
+  const { mutate, isPending } = useMutation({
+    mutationFn: createPayment,
+    onError: (e) => console.log("useMutation CreatePayment:", e),
+    onSuccess: () => navigate("/payments")
   })
 
 
   return (
 
     <Container maxWidth="xs">
-      <Paper component={'form'} sx={{ p: 2 }}>
-        <Typography variant="h4" sx={{ my: 2 }}>Expence Tracker</Typography>
-        <Typography sx={{ my: 4, textTransform: "uppercase" }}>Register</Typography>
+      <Paper component={'form'} onSubmit={handleSubmit(submitForm)} sx={{ p: 2 }}>
+        <Typography variant="h4" sx={{ my: 2 }}>Create Payment</Typography>
 
         <Stack direction="column" gap={"1rem"}>
 
-          <TextField variant="outlined" label="Name" error={true} type="text" />
-          <Alert severity="error"  >Name error</Alert>
+          <TextField variant="outlined" {...register("name")} label="Name" error={!!errors.name} type="text" />
+          {errors.name && <Alert severity="error"  >{errors.name.message}</Alert>}
 
-          <TextField variant="outlined" label="Payement Due Date" slotProps={{ inputLabel: { shrink: true } }} error={true} type="date" />
-          <Alert severity="error"  >Payment error</Alert>
+          <TextField variant="outlined" {...register("payedDueDate")} label="Payement Due Date" slotProps={{ inputLabel: { shrink: true } }} error={!!errors.payedDueDate} type="date" />
+          {errors.payedDueDate && <Alert severity="error"  >{errors.payedDueDate.message}</Alert>}
 
-          <TextField variant="outlined" label="amount" slotProps={{ inputLabel: { shrink: true } }} error={true} type="number" />
-          <Alert severity="error"  >Amount error</Alert>
+          <TextField variant="outlined" label="amount" {...register("amount")} slotProps={{ inputLabel: { shrink: true } }} error={!!errors.amount} type="number" />
+          {errors.amount && <Alert severity="error"  >{errors.amount.message}</Alert>}
 
           <Controller
-            name="bool"
-            control={control}
+            name="isPayed"
+            control={formControl}
             render={({ field }) => (
               <FormControlLabel
-                control={<Checkbox {...field} checked={field.value} />}
-                label="bool"
+                control={<Checkbox {...field} />}
+                label="is payed"
               />
             )}
           />
-          <Alert severity="error"  >Amount error</Alert>
 
-          <Button type="submit" disabled={false} loading={false} variant="contained"> Register</Button>
-
-          <Alert severity="error"  >General Error</Alert>
-
-          <Divider>or</Divider>
-
-          <Typography >
-            <>
-              Already have an account &nbsp;
-              < Link component={NavLink} to={"/login"}>Log in</Link>
-            </>
-          </Typography>
+          <Button type="submit" disabled={!isFormContainsErrors(errors)} loading={isPending} variant="contained"> Create</Button>
         </Stack>
       </Paper>
     </Container>

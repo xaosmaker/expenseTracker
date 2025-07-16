@@ -8,7 +8,10 @@ export function isFormContainsErrors(obj: object) {
 
 }
 
-export function dateToYMD(date: Date): string {
+export function dateToYMD(date: Date | string): string {
+  if (typeof date === "string") {
+    date = new Date(date)
+  }
   return date.toISOString().slice(0, 10)
 }
 

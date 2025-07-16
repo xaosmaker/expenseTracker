@@ -1,4 +1,4 @@
-import { api } from "../../services/api";
+import { api } from "../../../services/api";
 import type { RegisterUser } from "../schemas/regSchema";
 
 const BASE_USER_URL = "/api/users/"

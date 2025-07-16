@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { useContext } from "react";
-import { LayoutContext } from "./Layout";
+import { LayoutContext } from "../Layout";
 import { Outlet } from "react-router-dom";
 
 export default function Main() {

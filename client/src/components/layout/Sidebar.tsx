@@ -2,27 +2,25 @@ import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { useContext } from "react";
 import { LayoutContext } from "../Layout";
-import Home from "@mui/icons-material/Home";
-import Info from "@mui/icons-material/Info";
-import Contacts from "@mui/icons-material/Contacts";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
+import { NavLink, useLocation } from "react-router-dom";
+import { sidebarLinks, type SidebarLinks } from "../../data/sidebarData";
+import ListItemButton from "@mui/material/ListItemButton";
 
-const menuItems = [
-  { text: "Home", icon: <Home /> },
-  { text: "About", icon: <Info /> },
-  { text: "Contact", icon: <Contacts /> },
-];
 
 export default function Sidebar() {
   const layoutContext = useContext(LayoutContext)
   if (layoutContext === undefined) {
     throw new Error("layout is undefined")
   }
+
+  const { pathname } = useLocation()
+
+
 
   const drawer = (
     <Box sx={{
@@ -31,14 +29,14 @@ export default function Sidebar() {
       <Toolbar />
       <Divider />
       <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
+        {sidebarLinks.map(({ to, text, icon: IconComponent }: SidebarLinks) => (
+          <ListItemButton component={NavLink} selected={pathname === to} to={to} key={to}>
+            <ListItemIcon> <IconComponent /> </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItemButton>
         ))}
       </List>
-    </Box>
+    </Box >
   );
   return (
     <Box

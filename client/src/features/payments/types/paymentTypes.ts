@@ -6,6 +6,17 @@ export interface CreatePayment {
   isPayed: boolean
 }
 
+export interface Payment {
+  id: number
+  name: string
+  payedDueDate: Date
+  amount: number
+  userId: number
+  isPayed: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
 
 
 

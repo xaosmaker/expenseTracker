@@ -5,6 +5,7 @@ import { useTheme, type Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Navbar from "./layout/Navbar";
 import Sidebar from "./layout/Sidebar";
+import DeleteModal from "./DeleteModal";
 
 interface LayoutContextType {
   isMobile: boolean,
@@ -43,7 +44,10 @@ function Layout() {
         <Navbar />
         <Sidebar />
 
-        <Main />
+        <DeleteModal>
+
+          <Main />
+        </DeleteModal>
       </Box>
     </LayoutContext >
 

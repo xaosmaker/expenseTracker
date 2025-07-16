@@ -24,3 +24,18 @@ export async function createPayment(data: CreatePayment) {
 
   }
 }
+
+export async function deletePaymentApi(id: number) {
+  try {
+    const res = await api.delete(`/api/payments/${id}`)
+    return res.data
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      console.log("deletePayment axion instance:", e);
+      throw new Error("Something went wrong")
+    }
+    console.log("deletePayment: general error", e);
+
+  }
+
+}

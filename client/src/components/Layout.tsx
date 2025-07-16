@@ -1,10 +1,10 @@
 import { createContext, useState } from "react";
-import Main from "./Main";
+import Main from "./layout/Main";
 import Box from "@mui/material/Box";
 import { useTheme, type Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import Navbar from "./layout/Navbar";
+import Sidebar from "./layout/Sidebar";
 
 interface LayoutContextType {
   isMobile: boolean,

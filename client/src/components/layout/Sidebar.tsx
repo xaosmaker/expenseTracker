@@ -1,7 +1,7 @@
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import { useContext } from "react";
-import { LayoutContext } from "./Layout";
+import { LayoutContext } from "../Layout";
 import Home from "@mui/icons-material/Home";
 import Info from "@mui/icons-material/Info";
 import Contacts from "@mui/icons-material/Contacts";
@@ -44,20 +44,20 @@ export default function Sidebar() {
     <Box
       component="nav"
       sx={{
-        width: { md: layoutContext.drawerWidth }, flexShrink: { md: 0 }
+        width: { md: layoutContext.drawerWidth }, flexShrink: { md: 0 }, boxSizing: "border-box"
       }}
       aria-label="mailbox folders"
     >
       {/* Mobile Drawer */}
       <Drawer
-        variant="temporary"
+        variant={layoutContext.isMobile ? "temporary" : "permanent"}
         open={layoutContext.mobileOpen}
         onClose={layoutContext.handleDrawerToggle}
         ModalProps={{
           keepMounted: true, // Better mobile performance
         }}
         sx={{
-          display: { xs: "block", md: "none" },
+          display: { xs: layoutContext.isMobile ? "block" : "none", md: layoutContext.isMobile ? "none" : "block" },
           "& .MuiDrawer-paper": { width: layoutContext.drawerWidth },
         }}
       >
@@ -65,16 +65,20 @@ export default function Sidebar() {
       </Drawer>
 
       {/* Desktop Persistent Drawer */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          display: { xs: "none", md: "block" },
-          "& .MuiDrawer-paper": { width: layoutContext.drawerWidth, boxSizing: "border-box" },
-        }}
-        open
-      >
-        {drawer}
-      </Drawer>
+      {/* <Drawer */}
+      {/**/}
+      {/*   ModalProps={{ */}
+      {/*     keepMounted: true, // Better mobile performance */}
+      {/*   }} */}
+      {/*   variant="permanent" */}
+      {/*   sx={{ */}
+      {/*     display: { xs: "none", md: "block" }, */}
+      {/*     "& .MuiDrawer-paper": { width: layoutContext.drawerWidth, boxSizing: "border-box" }, */}
+      {/*   }} */}
+      {/*   open */}
+      {/* > */}
+      {/*   {drawer} */}
+      {/* </Drawer> */}
     </Box>
   )
 }

@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useContext } from "react";
-import { LayoutContext } from "./Layout";
+import { LayoutContext } from "../Layout";
 import Menu from "@mui/icons-material/Menu"
 
 export default function Navbar() {

@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { api } from "../../services/api";
+import { api } from "../../../services/api";
 import type { CreatePayment } from "../types/paymentTypes";
 
 export async function getPayments() {

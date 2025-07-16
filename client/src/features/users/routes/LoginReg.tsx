@@ -11,11 +11,11 @@ import Link from "@mui/material/Link"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Alert from "@mui/material/Alert"
-import { PasswordField } from "../../components/PasswordField"
+import { PasswordField } from "../../../components/PasswordField"
 import { regSchema, type RegisterUser } from "../schemas/regSchema"
 import { loginUser, registerUser } from "../services/userServices"
 import { AxiosError } from "axios"
-import { isFormContainsErrors } from "../../helpers/utils"
+import { isFormContainsErrors } from "../../../helpers/utils"
 import { useNavigate } from "react-router-dom"
 
 

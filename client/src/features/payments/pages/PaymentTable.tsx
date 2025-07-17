@@ -12,13 +12,16 @@ import type { Payment } from '../types/paymentTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import PaymentTableRow from './PaymentTableRow';
+import { useSearchParams } from 'react-router-dom';
 
 
 
 export default function PaymentTable() {
 
-  const { data, isLoading, isFetching } = useQuery({ queryKey: ["payments"], queryFn: getPayments })
+  const [searchParams, setSearchParams] = useSearchParams({ rows: "25", page: "0" })
+  const { data, isLoading, isFetching, } = useQuery({ queryKey: ["payments", searchParams.toString()], queryFn: () => getPayments(searchParams) })
   const payments: Payment[] = data
+
 
 
   if (isLoading) {
@@ -57,11 +60,19 @@ export default function PaymentTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination rowsPerPageOptions={[5, 10, 15]} rowsPerPage={5} onPageChange={(e, nextPage) => {
-        console.log("page", e, nextPage);
-      }} onRowsPerPageChange={(e) => {
-        console.log("row", e.target.value);
-      }} page={4} count={125} component={"div"} />
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50, 100]}
+        rowsPerPage={Number(searchParams.get("rows"))}
+        onPageChange={(_e, nextPage) => {
+          searchParams.set("page", nextPage.toString())
+          setSearchParams(searchParams)
+
+        }} onRowsPerPageChange={(e) => {
+          searchParams.set("rows", e.target.value)
+          searchParams.set("page", '0')
+          setSearchParams(searchParams)
+        }}
+        page={Number(searchParams.get('page'))} count={125} component={"div"} />
     </Paper>
   );
 }

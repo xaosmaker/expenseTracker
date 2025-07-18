@@ -31,7 +31,7 @@ export default function PaymentTableRow({ id, name, payedDueDate, amount, isPaye
       <TableCell align="right">{isPayed ? "Yes" : "No"}</TableCell>
       <TableCell align="right">{dateToYMD(createdAt)}</TableCell>
       <TableCell align="right">{dateToYMD(updatedAt)}</TableCell>
-      <TableCell><IconButton onClick={handleDeleteClick}><DeleteIcon /> </IconButton></TableCell>
+      <TableCell align="right"><IconButton onClick={handleDeleteClick}><DeleteIcon /> </IconButton></TableCell>
     </TableRow>
   )
 }

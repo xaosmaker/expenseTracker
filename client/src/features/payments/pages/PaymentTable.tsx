@@ -11,8 +11,11 @@ import TablePagination from '@mui/material/TablePagination';
 import type { Payment } from '../types/paymentTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import PaymentTableRow from './PaymentTableRow';
+import PaymentTableRow from '../components/PaymentTableRow';
 import { useSearchParams } from 'react-router-dom';
+import Loop from "@mui/icons-material/Loop"
+import IconButton from '@mui/material/IconButton';
+import { queryClient } from '../../../queryClient';
 
 
 
@@ -21,6 +24,10 @@ export default function PaymentTable() {
   const [searchParams, setSearchParams] = useSearchParams({ rows: "25", page: "0" })
   const { data, isLoading, isFetching, } = useQuery({ queryKey: ["payments", searchParams.toString()], queryFn: () => getPayments(searchParams) })
   const payments: Payment[] = data
+
+  function refetchQuery() {
+    queryClient.invalidateQueries({ queryKey: ["payments"] })
+  }
 
 
 
@@ -31,7 +38,6 @@ export default function PaymentTable() {
       <CircularProgress />
     </Box>)
   }
-  console.log(payments.length);
 
 
   return (
@@ -49,7 +55,7 @@ export default function PaymentTable() {
               <TableCell align="right">is Payed</TableCell>
               <TableCell align="right">created at</TableCell>
               <TableCell align="right">updated at</TableCell>
-              <TableCell>{isFetching && <CircularProgress size={20} />}</TableCell>
+              <TableCell align='right'><IconButton onClick={refetchQuery} loading={isFetching}><Loop /></IconButton></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

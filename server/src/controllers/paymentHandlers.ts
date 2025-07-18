@@ -18,13 +18,27 @@ export async function createPaymentHandler(req: Request<{}, {}, CreatePayment>, 
   res.status(201).json(payment)
 }
 
-export async function getAllUserPaymentsHandler(req: Request, res: Response, _next: NextFunction) {
+export async function getAllUserPaymentsHandler(req: Request<{}, {}, {}, { page: string, rows: string }>, res: Response, _next: NextFunction) {
+  if (!req.query.page || isNaN(Number(req.query.page))) {
+    throw new AppError("Param 'page' must be a number", 400)
+  }
+
+  if (!req.query.rows || isNaN(Number(req.query.rows))) {
+    throw new AppError("Param 'rows' must be a number", 400)
+  }
+
+  const page = Number(req.query.page)
+  const rows = Number(req.query.rows)
+
+
+
   if (!(req.user instanceof User)) {
     throw new AppError("Unauthorized", 401)
   }
 
-  const payments = await getPaymentsByUserIdQuery(req.user.id)
-  res.json(payments)
+  const payments = await getPaymentsByUserIdQuery(req.user.id, rows, page)
+
+  res.json({ maxResults: 3, payments })
 }
 
 export async function getPaymentByIDHandler(req: Request<{ id: number }>, res: Response, _next: NextFunction) {

@@ -9,7 +9,6 @@ export async function createPaymentQuery({ name, payed_due_date, amount, user_id
 
     const { rows } = await pool.query("INSERT INTO payments (name, payed_due_date, amount, user_id, is_payed) VALUES ($1,$2,$3,$4,$5) RETURNING *;",
       [name, payed_due_date, amount, user_id, is_payed])
-    console.log(rows);
     return new Payment(rows[0])
   } catch (e) {
     if (e instanceof DatabaseError && e.code === "23505") {
@@ -21,8 +20,8 @@ export async function createPaymentQuery({ name, payed_due_date, amount, user_id
 }
 
 
-export async function getPaymentsByUserIdQuery(user_id: number) {
-  const { rows } = await pool.query("SELECT * FROM payments where user_id = $1", [user_id])
+export async function getPaymentsByUserIdQuery(user_id: number, limit: number, offset: number) {
+  const { rows } = await pool.query("SELECT * FROM payments where user_id = $1 LIMIT $2 OFFSET $3", [user_id, limit, offset])
   const paymentList: Payment[] = []
   for (const row of rows) {
     paymentList.push(new Payment(row))

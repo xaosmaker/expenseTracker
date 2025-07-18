@@ -52,5 +52,15 @@ export async function deletePaymentByIdQuery(id: number, user_id: number) {
   await pool.query("DELETE FROM payments WHERE id = $1 AND user_id = $2", [id, user_id])
 }
 
+export async function getAllPaymentsCountQuery(user_id: number) {
+  const { rows } = await pool.query("SELECT COUNT(*) AS all_payments FROM payments where user_id = $1", [user_id,])
+
+  if (rows.length === 1) {
+    return rows[0]
+  }
+  return
+
+}
+
 
 

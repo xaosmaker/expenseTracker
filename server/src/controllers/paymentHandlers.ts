@@ -3,7 +3,7 @@ import { CreatePayment, CreatePaymentDB, PutPayment } from "../types/Payment.js"
 import { fieldErrorsToJsonResponse } from "../errors/fieldErrorsToJsonResponse.js";
 import { User } from "../types/User.js";
 import { AppError } from "../errors/AppErrors.js";
-import { createPaymentQuery, deletePaymentByIdQuery, getPaymentByIDAndUserIdQuery, getPaymentsByUserIdQuery, putPaymentByIdQuery } from "../models/paymentsDB.js";
+import { createPaymentQuery, deletePaymentByIdQuery, getAllPaymentsCountQuery, getPaymentByIDAndUserIdQuery, getPaymentsByUserIdQuery, putPaymentByIdQuery } from "../models/paymentsDB.js";
 
 
 export async function createPaymentHandler(req: Request<{}, {}, CreatePayment>, res: Response, _next: NextFunction) {
@@ -37,8 +37,10 @@ export async function getAllUserPaymentsHandler(req: Request<{}, {}, {}, { page:
   }
 
   const payments = await getPaymentsByUserIdQuery(req.user.id, rows, page)
+  const allPayments = await getAllPaymentsCountQuery(req.user.id)
+  const maxResults = allPayments["all_payments"]
 
-  res.json({ maxResults: 3, payments })
+  res.json({ maxResults, payments })
 }
 
 export async function getPaymentByIDHandler(req: Request<{ id: number }>, res: Response, _next: NextFunction) {

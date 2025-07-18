@@ -5,6 +5,10 @@ export interface CreatePayment {
   amount: number
   isPayed: boolean
 }
+export interface AllPayments {
+  maxResults: number
+  payments: Payment[]
+}
 
 export interface Payment {
   id: number

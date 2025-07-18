@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import { useQuery } from '@tanstack/react-query';
 import { getPayments } from '../services/paymentServices';
 import TablePagination from '@mui/material/TablePagination';
-import type { Payment } from '../types/paymentTypes';
+import type { AllPayments } from '../types/paymentTypes';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import PaymentTableRow from '../components/PaymentTableRow';
@@ -16,19 +16,25 @@ import { useSearchParams } from 'react-router-dom';
 import Loop from "@mui/icons-material/Loop"
 import IconButton from '@mui/material/IconButton';
 import { queryClient } from '../../../queryClient';
+import Typography from '@mui/material/Typography';
 
+
+//TODO: change the table allways show the table and when is refetching we show the loader at inside the table
 
 
 export default function PaymentTable() {
 
   const [searchParams, setSearchParams] = useSearchParams({ rows: "25", page: "0" })
-  const { data, isLoading, isFetching, } = useQuery({ queryKey: ["payments", searchParams.toString()], queryFn: () => getPayments(searchParams) })
-  const payments: Payment[] = data
+  const { data: paymentData = { maxResults: 0, payments: [] }, isLoading, isFetching, isError } = useQuery<AllPayments>({ queryKey: ["payments", searchParams.toString()], queryFn: () => getPayments(searchParams) })
 
   function refetchQuery() {
     queryClient.invalidateQueries({ queryKey: ["payments"] })
   }
 
+
+  if (isError) {
+    return <Typography>Try again later something went wrong</Typography>
+  }
 
 
   if (isLoading) {
@@ -60,14 +66,14 @@ export default function PaymentTable() {
           </TableHead>
           <TableBody>
 
-            {payments.map((data) => (
+            {paymentData.payments.map((data) => (
               <PaymentTableRow {...data} key={data.id} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 50, 100]}
+        rowsPerPageOptions={[1, 10, 25, 50, 100]}
         rowsPerPage={Number(searchParams.get("rows"))}
         onPageChange={(_e, nextPage) => {
           searchParams.set("page", nextPage.toString())
@@ -78,7 +84,7 @@ export default function PaymentTable() {
           searchParams.set("page", '0')
           setSearchParams(searchParams)
         }}
-        page={Number(searchParams.get('page'))} count={125} component={"div"} />
+        page={Number(searchParams.get('page'))} count={paymentData.maxResults} component={"div"} />
     </Paper>
   );
 }

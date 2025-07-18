@@ -14,7 +14,6 @@ export default function RequireAuth() {
     }
 
   }
-  console.log(loginCookie.isLogin);
 
   if (loginCookie.isLogin) {
     return <Outlet />

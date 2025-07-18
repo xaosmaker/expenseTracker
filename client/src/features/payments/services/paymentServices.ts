@@ -3,10 +3,10 @@ import { api } from "../../../services/api";
 import type { CreatePayment } from "../types/paymentTypes";
 
 export async function getPayments(params: URLSearchParams) {
-  console.log(123, params.toString());
 
-  const res = await api.get("/api/payments/")
+  const res = await api.get(`/api/payments/?${params.toString()}`)
   const data = await res.data
+
   return data
 
 }

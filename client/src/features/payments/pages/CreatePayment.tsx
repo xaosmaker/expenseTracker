@@ -3,33 +3,54 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useForm, Controller } from "react-hook-form";
-import { paymentSchema, type CreatePayment, type PaymentSchema } from "../types/paymentTypes";
+import { paymentSchema, type CreatePayment, type Payment, type PaymentSchema } from "../types/paymentTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { dateToYMD, isFormContainsErrors } from "../../../helpers/utils";
-import { useMutation } from "@tanstack/react-query";
-import { createPayment } from "../services/paymentServices";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createPayment, getSinglePaymentApi, putSinglePaymentApi } from "../services/paymentServices";
+import { useEffect } from "react";
 
 //TODO: i will make it so it can update and the data so it will be create update
 
 export default function CreatePayment() {
   const navigate = useNavigate()
-  const { control: formControl, register, handleSubmit, formState: { errors } } = useForm<PaymentSchema>({
+  const { control: formControl, setValue, register, handleSubmit, formState: { errors } } = useForm<PaymentSchema>({
     mode: "onChange",
     resolver: zodResolver(paymentSchema),
   })
+  const { paymentId } = useParams<{ paymentId: string }>()
+
+  const { data } = useQuery<Payment>({ enabled: !!paymentId, queryKey: ["singlePayment", paymentId], queryFn: () => getSinglePaymentApi(paymentId!) })
+
+
+  useEffect(() => {
+    if (data) {
+      setValue("payedDueDate", dateToYMD(data.payedDueDate))
+      setValue("isPayed", data.isPayed)
+      setValue("name", data.name)
+      setValue("amount", data.amount)
+    }
+  })
+
+
   function submitForm(data: PaymentSchema) {
-    const dataNew: CreatePayment = { ...data, payedDueDate: dateToYMD(data.payedDueDate) }
+    const dataNew: Partial<Payment> = { ...data, payedDueDate: dateToYMD(data.payedDueDate) }
+    if (paymentId) {
+      dataNew.id = Number(paymentId)
+    }
+
+
 
     mutate(dataNew)
   }
   const { mutate, isPending } = useMutation({
-    mutationFn: createPayment,
+    mutationFn: paymentId ? (data: Partial<Payment>) => putSinglePaymentApi(paymentId, data) : createPayment,
     onError: (e) => console.log("useMutation CreatePayment:", e),
     onSuccess: () => navigate("/payments")
   })
@@ -39,7 +60,7 @@ export default function CreatePayment() {
 
     <Container maxWidth="xs">
       <Paper component={'form'} onSubmit={handleSubmit(submitForm)} sx={{ p: 2 }}>
-        <Typography variant="h4" sx={{ my: 2 }}>Create Payment</Typography>
+        <Typography variant="h4" sx={{ my: 2 }}>{paymentId ? "Update Payment" : "Create Payment"}</Typography>
 
         <Stack direction="column" gap={"1rem"}>
 
@@ -57,13 +78,14 @@ export default function CreatePayment() {
             control={formControl}
             render={({ field }) => (
               <FormControlLabel
-                control={<Checkbox {...field} />}
+                control={<Checkbox checked={field.value} {...field} />}
                 label="is payed"
               />
-            )}
+            )
+            }
           />
 
-          <Button type="submit" disabled={!isFormContainsErrors(errors)} loading={isPending} variant="contained"> Create</Button>
+          <Button type="submit" disabled={!isFormContainsErrors(errors)} loading={isPending} variant="contained">{paymentId ? "Update" : "Create"}</Button>
         </Stack>
       </Paper>
     </Container>

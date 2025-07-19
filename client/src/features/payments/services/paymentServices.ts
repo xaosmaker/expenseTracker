@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "../../../services/api";
-import type { CreatePayment } from "../types/paymentTypes";
+import type { CreatePayment, Payment } from "../types/paymentTypes";
 
 export async function getPayments(params: URLSearchParams) {
 
@@ -37,6 +37,36 @@ export async function deletePaymentApi(id: number) {
       throw new Error("Something went wrong")
     }
     console.log("deletePayment: general error", e);
+
+  }
+
+}
+
+export async function getSinglePaymentApi(id: string) {
+  try {
+    const res = await api.get(`/api/payments/${id}`)
+    return res.data
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      console.log("get Single payment axios instance:", e);
+      throw new Error("Something went wrong")
+    }
+    console.log("get Single payment: general error", e);
+
+  }
+
+}
+
+export async function putSinglePaymentApi(id: string, data: Partial<Payment>) {
+  try {
+    const res = await api.put(`/api/payments/${id}`, data)
+    return res.data
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      console.log("putSinglePaymentApi axion instance:", e);
+      throw new Error("Something went wrong")
+    }
+    console.log("putSinglePaymentApi: general error", e);
 
   }
 

@@ -6,21 +6,23 @@ import TextField from "@mui/material/TextField"
 import { useState } from "react"
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
-export function PasswordField({ label, register, hasError }: { label: string, register: UseFormRegisterReturn, hasError: boolean }) {
+export function PasswordField({ label, register, hasError, disabled = false }: { label: string, register: UseFormRegisterReturn, hasError: boolean, disabled?: boolean }) {
 
   const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false)
   const setPasswordVisible = () => {
     setPasswordIsVisible(bool => !bool)
   }
   return (
-    <TextField {...register} slotProps={{
-      input: {
-        endAdornment: <InputAdornment position="end">
-          <IconButton onClick={setPasswordVisible}>
-            {passwordIsVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-          </IconButton>
-        </InputAdornment>
-      }
-    }} variant="outlined" label={label} error={hasError} type={passwordIsVisible ? "text" : "password"} />
+    <TextField {...register}
+      disabled={disabled}
+      slotProps={{
+        input: {
+          endAdornment: <InputAdornment position="end">
+            <IconButton onClick={setPasswordVisible}>
+              {passwordIsVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </IconButton>
+          </InputAdornment>
+        }
+      }} variant="outlined" label={label} error={hasError} type={passwordIsVisible ? "text" : "password"} />
   )
 }

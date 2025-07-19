@@ -15,3 +15,9 @@ export async function registerUser(payload: RegisterUser) {
   const data = await res.data
   return data
 }
+
+export async function getUserMeApi() {
+  const res = await api.get(`${BASE_USER_URL}me`)
+  const data = await res.data
+  return data
+}

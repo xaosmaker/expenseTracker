@@ -1,6 +1,4 @@
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import { useForm } from "react-hook-form";
@@ -22,14 +20,14 @@ export default function UserMe() {
 
   return (
     <>
-      <Box sx={{ paddingTop: "4rem", justifyContent: "center", alignItems: "center", display: "flex", flexDirection: "column" }}>
-        <Avatar sx={{ height: 300, width: 300 }} src="https://drosinakis.com/ZTS03058.jpg" alt="test" />
-        <Box sx={{ paddingTop: "4rem" }}>
-
-          <Button>Update Photo</Button>
-          <Button>Delete Photo</Button>
-        </Box>
-      </Box>
+      {/* <Box sx={{ paddingTop: "4rem", justifyContent: "center", alignItems: "center", display: "flex", flexDirection: "column" }}> */}
+      {/*   <Avatar sx={{ height: 300, width: 300 }} src="https://drosinakis.com/ZTS03058.jpg" alt="test" /> */}
+      {/*   <Box sx={{ paddingTop: "4rem" }}> */}
+      {/**/}
+      {/*     <Button>Update Photo</Button> */}
+      {/*     <Button>Delete Photo</Button> */}
+      {/*   </Box> */}
+      {/* </Box> */}
       <Container component={"form"} maxWidth="md" sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
 
         <TextField {...register("email")} slotProps={{ inputLabel: { shrink: true } }} disabled label="email"></TextField>
@@ -42,9 +40,9 @@ export default function UserMe() {
           </Box>
         </>}
 
-        <Button>Change Email</Button>
-        <Button>Change Password</Button>
-        <Button>Edit</Button>
+        {/* <Button>Change Email</Button> */}
+        {/* <Button>Change Password</Button> */}
+        {/* <Button>Edit</Button> */}
 
       </Container>
     </>

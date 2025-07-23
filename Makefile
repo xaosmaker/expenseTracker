@@ -17,3 +17,9 @@ inspect_server:
 	docker exec -it expense_tracker /bin/sh
 migrations:
 	docker exec expense_tracker npm run migrations
+
+run-prod:
+	docker compose -f prod.yaml up -d --remove-orphans
+
+build-prod:
+	docker compose -f prod.yaml build --no-cache

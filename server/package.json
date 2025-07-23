@@ -4,6 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "build": "tsc",
+    "server": "node ./dist/server.js",
     "dev": "concurrently 'tsc -w' 'nodemon ./dist/server.js'",
     "migrations": "node ./dist/makeMigrations.js"
   },

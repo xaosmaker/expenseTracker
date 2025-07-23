@@ -1,0 +1,66 @@
+services:
+  expense_tracker:
+    container_name: expense_tracker
+    build:
+      context: .
+      dockerfile: ./docker/prod/server/Dockerfile
+    env_file:
+        - ./.env
+    expose: 
+      - ${PORT}
+    networks:
+        - expense_tracker_db_net
+        - prod-nginx-net
+    command: npm run server
+
+
+
+
+
+  # expence_client:
+  #   container_name: expense_client
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/local/client/Dockerfile
+  #   volumes:
+  #     - ./client:/client
+  #     -  /client/node_modules
+  #   ports:
+  #     - 5173:5173
+  #   networks:
+  #     - prod-nginx-net
+  #   command: npm run server
+  #
+
+
+
+  expense_db:
+    container_name: expense_db
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    networks:
+      - expense_tracker_db_net
+
+
+networks:
+  prod-nginx-net:
+    external: true
+  expense_tracker_db_net:
+
+
+volumes:
+  pg-data:
+
+
+
+
+
+
+

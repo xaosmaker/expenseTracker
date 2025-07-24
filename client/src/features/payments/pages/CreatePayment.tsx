@@ -22,6 +22,9 @@ export default function CreatePayment() {
   const navigate = useNavigate()
   const { control: formControl, setValue, register, handleSubmit, formState: { errors } } = useForm<PaymentSchema>({
     mode: "onChange",
+    defaultValues: {
+      isPayed: false
+    },
     resolver: zodResolver(paymentSchema),
   })
   const { paymentId } = useParams<{ paymentId: string }>()

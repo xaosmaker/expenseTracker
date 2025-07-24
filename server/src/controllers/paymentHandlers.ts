@@ -27,8 +27,8 @@ export async function getAllUserPaymentsHandler(req: Request<{}, {}, {}, { page:
     throw new AppError("Param 'rows' must be a number", 400)
   }
 
-  const page = Number(req.query.page)
   const rows = Number(req.query.rows)
+  const page = Number(req.query.page) * rows
 
 
 

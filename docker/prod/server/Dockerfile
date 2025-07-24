@@ -8,6 +8,7 @@ FROM  node:24-alpine3.22 as runner
 WORKDIR /app
 
 COPY  --from=builder /server/dist /app/dist
+COPY --from=builder  /server/migrations /app/migrations
 COPY --from=builder /server/package.json .
 RUN npm install --only=production
 

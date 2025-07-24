@@ -40,7 +40,7 @@ export default function CreatePayment() {
 
 
   function submitForm(data: PaymentSchema) {
-    const dataNew: Partial<Payment> = { ...data, payedDueDate: dateToYMD(data.payedDueDate) }
+    const dataNew: Omit<Payment, "createdAt" | "updatedAt" | "userId"> = { ...data, payedDueDate: dateToYMD(data.payedDueDate), id: -1 }
     if (paymentId) {
       dataNew.id = Number(paymentId)
     }
@@ -49,8 +49,9 @@ export default function CreatePayment() {
 
     mutate(dataNew)
   }
+
   const { mutate, isPending } = useMutation({
-    mutationFn: paymentId ? (data: Partial<Payment>) => putSinglePaymentApi(paymentId, data) : createPayment,
+    mutationFn: paymentId ? (data: Omit<Payment, "createdAt" | "updatedAt" | "userId">) => putSinglePaymentApi(paymentId, data) : createPayment,
     onError: (e) => console.log("useMutation CreatePayment:", e),
     onSuccess: () => navigate("/payments")
   })

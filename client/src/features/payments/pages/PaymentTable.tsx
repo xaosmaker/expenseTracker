@@ -50,7 +50,7 @@ export default function PaymentTable() {
 
     <Paper>
 
-      <TableContainer component={Paper} sx={{ maxHeight: 500, overflow: 'auto' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 600, overflow: 'auto' }}>
         <Table stickyHeader aria-label="simple table">
           <TableHead>
 
@@ -73,7 +73,7 @@ export default function PaymentTable() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[1, 10, 25, 50, 100]}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         rowsPerPage={Number(searchParams.get("rows"))}
         onPageChange={(_e, nextPage) => {
           searchParams.set("page", nextPage.toString())

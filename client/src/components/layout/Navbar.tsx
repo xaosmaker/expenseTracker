@@ -8,6 +8,7 @@ import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle"
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu"
 
 export default function Navbar() {
   const layoutContext = useContext(LayoutContext)
@@ -34,6 +35,7 @@ export default function Navbar() {
             onClick={layoutContext.handleDrawerToggle}
             sx={{ mr: 2 }}
           >
+            <MenuIcon />
           </IconButton>
         )}
         <Typography variant="h6" noWrap component="div">

@@ -15,6 +15,7 @@ import { dateToYMD, isFormContainsErrors } from "../../../helpers/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createPayment, getSinglePaymentApi, putSinglePaymentApi } from "../services/paymentServices";
 import { useEffect } from "react";
+import Box from "@mui/material/Box";
 
 //TODO: i will make it so it can update and the data so it will be create update
 
@@ -40,6 +41,10 @@ export default function CreatePayment() {
       setValue("amount", data.amount)
     }
   })
+
+  function handleCancel() {
+    navigate("/payments")
+  }
 
 
   function submitForm(data: PaymentSchema) {
@@ -89,7 +94,10 @@ export default function CreatePayment() {
             }
           />
 
-          <Button type="submit" disabled={!isFormContainsErrors(errors)} loading={isPending} variant="contained">{paymentId ? "Update" : "Create"}</Button>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+            <Button type="submit" disabled={!isFormContainsErrors(errors)} loading={isPending} variant="contained">{paymentId ? "Update" : "Create"}</Button>
+            <Button type="button" onClick={handleCancel}>Cancel</Button>
+          </Box>
         </Stack>
       </Paper>
     </Container>

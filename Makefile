@@ -23,3 +23,6 @@ run-prod:
 
 build-prod:
 	docker compose -f prod.yaml build --no-cache
+
+copy:
+	./copy-static.sh

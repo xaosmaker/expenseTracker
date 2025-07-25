@@ -22,6 +22,8 @@ export default function Sidebar() {
 
 
 
+
+
   const drawer = (
     <Box sx={{
       width: layoutContext.drawerWidth,
@@ -51,6 +53,7 @@ export default function Sidebar() {
         variant={layoutContext.isMobile ? "temporary" : "permanent"}
         open={layoutContext.mobileOpen}
         onClose={layoutContext.handleDrawerToggle}
+        onClick={layoutContext.handleDrawerToggle}
         ModalProps={{
           keepMounted: true, // Better mobile performance
         }}

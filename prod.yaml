@@ -1,33 +1,32 @@
 services:
   expense_tracker:
     container_name: expense_tracker
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ./docker/prod/server/Dockerfile
     env_file:
-        - ./.env
-    expose: 
+      - ./.env
+    expose:
       - ${PORT}
     networks:
-        - expense_tracker_db_net
-        - prod-nginx-net
+      - expense_tracker_db_net
+      - prod-nginx-net
     command: npm run server
 
-
   expence_client:
+    restart: unless-stopped
     container_name: expense_client
     build:
       context: .
       dockerfile: ./docker/prod/client/Dockerfile
     volumes:
       - ./client:/client
-      -  /client/node_modules
+      - /client/node_modules
     command: npm run build
 
-
-
-
   expense_db:
+    restart: unless-stopped
     container_name: expense_db
     image: postgres
     environment:
@@ -41,19 +40,10 @@ services:
     networks:
       - expense_tracker_db_net
 
-
 networks:
   prod-nginx-net:
     external: true
   expense_tracker_db_net:
 
-
 volumes:
   pg-data:
-
-
-
-
-
-
-
